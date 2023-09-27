@@ -151,6 +151,7 @@
  
  ctld.JTAC_laseSpotCorrections = false -- if true, the JTAC will attempt to lead the target, taking into account current wind conditions and the speed of the target (particularily useful against moving heavy armor)
  
+ 
  -- ***************** Pickup, dropoff and waypoint zones *****************
  
  -- Available colors (anything else like "none" disables smoke): "green", "red", "white", "orange", "blue", "none",
@@ -1356,8 +1357,30 @@
      local _unitId = ctld.getNextUnitId()
  
      local _name = string.format("%s #%i", _crateType.desc, _unitId)
- 
-     local _spawnedCrate = ctld.spawnCrateStatic(_country, _unitId, _point, _name, _crateType.weight,_side)
+	 
+	 local zonetype = "land"
+	
+	
+	  for _i, _zoneDetails in pairs(ctld.pickupZones) do
+		if _zoneDetails[2] == _zone then
+			if _zoneDetails[0] == "Teddy" or _zoneDetails[0] == "Tarawa"
+				zonetype = "ship"
+				break
+			end
+		end
+	  end
+
+     
+	 if cltd.slingLoad == false and ctld.hoverPickup == false  then
+		local _spawnedCrate =  ctld.loadNearbyCrate(_name)
+	 
+	 else	
+		if zonetype == ship then
+			local _spawnedCrate =  ctld.loadNearbyCrate(_name)
+		else		
+			local _spawnedCrate = ctld.spawnCrateStatic(_country, _unitId, _point, _name, _crateType.weight,_side)
+		end 
+     end
  
  end
  
