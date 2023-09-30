@@ -1725,8 +1725,13 @@ function ctld.spawnCrate(_arguments)
             local _side = _heli:getCoalition()
 
             local _name = string.format("%s #%i", _crateType.desc, _unitId)
-
-            local _spawnedCrate = ctld.spawnCrateStatic(_heli:getCountry(), _unitId, _point, _name, _crateType.weight,_side)
+			
+			local _outOfSight = {x = coord.LLtoLO(25.97500000, 36.820278, 103).x, y = coord.LLtoLO(25.97500000 , 36.820278, 103).y, z = coord.LLtoLO(25.97500000 , 36.820278, 103).z}
+					
+             _outOfSight.x=10000.007
+			ctld.displayMessageToGroup(_heli, string.format(" Test-Values from _point: X=%s, Y=%s  ", _point.x, _point.y), 20)
+			ctld.displayMessageToGroup(_heli, string.format(" Test-Values: X=%s, Y=%s  ", _outOfSight.x, _outOfSight.y), 20)
+            local _spawnedCrate = ctld.spawnCrateStatic(_heli:getCountry(), _unitId, _outOfSight, _name, _crateType.weight,_side)
 			
 			ctld.loadNearbyCrate(_heli:getName())
 			
@@ -2736,7 +2741,7 @@ function ctld.loadNearbyCrate(_name)
 
             for _, _crate in pairs(_crates) do
 
-                if _crate.dist < 50.0 then
+        --        if _crate.dist < 50.0 then
                     ctld.displayMessageToGroup(_transUnit, "Loaded  " .. _crate.details.desc .. " crate!", 10,true)
 
                     if _transUnit:getCoalition() == 1 then
@@ -2754,10 +2759,10 @@ function ctld.loadNearbyCrate(_name)
                     ctld.inTransitSlingLoadCrates[_name] = _copiedCrate
                     ctld.adaptWeightToCargo(_name)
                     return
-                end
+          --      end
             end
 
-            ctld.displayMessageToGroup(_transUnit, "No Crates within 50m to load!", 10,true)
+          --  ctld.displayMessageToGroup(_transUnit, "No Crates within 50m to load!", 10,true)
 
         else
             -- crate onboard
